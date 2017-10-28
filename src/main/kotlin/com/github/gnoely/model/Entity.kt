@@ -10,7 +10,7 @@ data class Order(
         @Column(name="order_id")
         val id: String,
         val userId: String,
-        val evalSet: Boolean,
+        val evalSet: String,
         val orderNumber: Int,
         val orderDayOfTheWeek: Int,
         val orderHourOfDay: Int,
