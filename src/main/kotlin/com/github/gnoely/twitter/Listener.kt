@@ -14,7 +14,7 @@ class Listener : StatusListener {
     @Autowired lateinit var twitterOut : TwitterOut
 
     override fun onStatus(status: Status) {
-        twitterOut.send(status.user.screenName, " - Bad user, no recipe for you: " + LocalTime.now().toString())
+        twitterOut.sendReply(status.id, status.user.screenName, " - Bad user, no recipe for you: " + LocalTime.now().toString())
         println(status)
 
     }

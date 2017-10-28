@@ -22,7 +22,6 @@ import javax.annotation.PostConstruct
 class TwitterIn {
 
     @Autowired lateinit var twitterConfig : TwitterConfiguration
-    @Autowired lateinit var twitterOut : TwitterOut
     @Autowired lateinit var listener : Listener
 
     /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */

@@ -3,6 +3,7 @@ package com.github.gnoely.twitter
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import twitter4j.StatusUpdate
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import javax.annotation.PostConstruct
@@ -34,16 +35,18 @@ class TwitterOut {
         twitter.addRateLimitStatusListener(limitListener)
     }
 
-    fun send(mentionUser : String , body : String) {
+    fun sendReply(originalStatusId : Long, mentionUser : String , body : String) {
 
-        val status = twitter.updateStatus(buildMessage(mentionUser, body))
+        val status = twitter.updateStatus(buildMessage(originalStatusId, mentionUser, body))
         println("Successfully updated the status to [" + status.text + "].")
 
     }
 
 
-    private fun buildMessage(mentionUser : String , body : String): String {
-        return "@$mentionUser $body"
+    private fun buildMessage(inReplyToStatusId : Long, mentionUser : String , body : String): StatusUpdate {
+        val statusUpdate = StatusUpdate("@$mentionUser $body")
+        statusUpdate.inReplyToStatusId(inReplyToStatusId)
+        return statusUpdate
     }
 
     private fun loadAccessToken() : AccessToken  {
