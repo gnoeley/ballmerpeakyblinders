@@ -21,6 +21,7 @@ import java.time.LocalTime
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
+import javax.annotation.PostConstruct
 
 
 @Component
@@ -63,8 +64,6 @@ class TwitterIn {
     }
 
     private fun auth() : Authentication {
-
-
         return OAuth1(
                 twitterConfig.getConsumerKey(),
                 twitterConfig.getConsumerSecret(),
@@ -72,7 +71,7 @@ class TwitterIn {
                 twitterConfig.getAccessTokenSecret())
     }
 
-
+    @PostConstruct
     fun connect()  {
         val hosebirdEndpoint = StatusesFilterEndpoint()
 

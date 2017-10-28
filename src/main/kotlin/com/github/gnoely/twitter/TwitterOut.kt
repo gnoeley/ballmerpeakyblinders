@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
+import javax.annotation.PostConstruct
 
 
 /**
@@ -19,14 +20,18 @@ class TwitterOut {
 
     @Autowired lateinit var config : TwitterConfiguration
 
+    val twitter = TwitterFactory().instance!!
 
-    fun send(mentionUser : String , body : String) {
+
+    @PostConstruct
+    fun auth() {
         // The factory instance is re-useable and thread safe.
-        val factory = TwitterFactory()
         val accessToken = loadAccessToken()
-        val twitter = factory.instance
         twitter.setOAuthConsumer(config.getConsumerKey(), config.getConsumerSecret())
         twitter.oAuthAccessToken = accessToken
+    }
+
+    fun send(mentionUser : String , body : String) {
 
         val status = twitter.updateStatus(buildMessage(mentionUser, body))
         println("Successfully updated the status to [" + status.text + "].")
