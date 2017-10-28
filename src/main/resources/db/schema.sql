@@ -4,3 +4,8 @@ create table product(product_id VARCHAR(255), name VARCHAR(255), aisle_id VARCHA
 create table orders_products_train(order_id VARCHAR(255), product_id VARCHAR(255), add_to_cart_order BIGINT, reordered BOOLEAN);
 create table orders_products_prior(order_id VARCHAR(255), product_id VARCHAR(255), add_to_cart_order BIGINT, reordered BOOLEAN);
 create table department(department_id VARCHAR(255), department VARCHAR(255));
+
+CREATE INDEX orders_primary ON orders(order_id);
+CREATE INDEX product_id_primary ON product(product_id);
+CREATE INDEX orders_products_train_product_id_foreign ON orders_products_train(product_id);
+CREATE INDEX orders_products_train_order_id_foreign ON orders_products_train(order_id);
