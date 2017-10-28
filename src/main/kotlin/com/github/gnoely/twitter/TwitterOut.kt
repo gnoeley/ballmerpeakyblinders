@@ -2,6 +2,7 @@ package com.github.gnoely.twitter
 
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import twitter4j.StatusUpdate
 import twitter4j.TwitterFactory
@@ -17,17 +18,24 @@ import javax.annotation.PostConstruct
  */
 
 @Component
+@ConfigurationProperties("twitter.client.out")
 class TwitterOut {
 
     @Autowired lateinit var config : TwitterConfiguration
     @Autowired lateinit var limitListener : RateLimitListener
 
+    var enabled: Boolean = false
 
     val twitter = TwitterFactory().instance!!
 
-
     @PostConstruct
     private fun auth() {
+        if (!enabled) {
+            println("Twitter Client Out IS DISABLED")
+            return
+        }
+        println("Twitter Client Out IS ENABLED")
+
         // The factory instance is re-useable and thread safe.
         val accessToken = loadAccessToken()
         twitter.setOAuthConsumer(config.getConsumerKey(), config.getConsumerSecret())

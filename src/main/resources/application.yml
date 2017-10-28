@@ -11,3 +11,10 @@ spring:
     url: jdbc:h2:~/shopping;DB_CLOSE_ON_EXIT=FALSE
 #    data: classpath:db/data.sql
 #    schema: classpath:db/schema.sql
+
+twitter:
+  client:
+    in:
+      enabled: false
+    out:
+      enabled: false

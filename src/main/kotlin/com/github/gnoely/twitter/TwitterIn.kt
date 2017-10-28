@@ -11,6 +11,7 @@ import com.twitter.hbc.httpclient.auth.Authentication
 import com.twitter.hbc.httpclient.auth.OAuth1
 import com.twitter.hbc.twitter4j.Twitter4jStatusClient
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
@@ -19,10 +20,13 @@ import javax.annotation.PostConstruct
 
 
 @Component
+@ConfigurationProperties("twitter.client.in")
 class TwitterIn {
 
     @Autowired lateinit var twitterConfig : TwitterConfiguration
     @Autowired lateinit var listener : Listener
+
+    var enabled: Boolean = false
 
     /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
     private val msgQueue : BlockingQueue<String> = LinkedBlockingQueue<String>(100000)
@@ -49,6 +53,12 @@ class TwitterIn {
 
     @PostConstruct
     fun connect()  {
+        if (!enabled) {
+            println("Twitter Client In IS DISABLED")
+            return
+        }
+        println("Twitter Client In IS ENABLED")
+
         val hosebirdEndpoint = StatusesFilterEndpoint()
 
         val terms : List<String> = listOf(twitterConfig.getListenFor())
