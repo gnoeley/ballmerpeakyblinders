@@ -7,6 +7,8 @@ object RecipeService {
     fun getFirstRecipeForIngredient(ingredient: String) : Any {
 
 
+        return "A"
+
     }
 
 
