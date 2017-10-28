@@ -9,9 +9,7 @@ class YummlyClientTest {
 
     @Test
     fun testGetRecipe() {
-        val recipes = YummlyClient.getRecipes("tomato")
-
-
+        val recipes = YummlyClient.getRecipe("tomato")
         println(recipes)
     }
 
