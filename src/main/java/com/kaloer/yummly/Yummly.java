@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013 Mads Kal¿r
+ * (C) Copyright 2013 Mads Kalï¿½r
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,18 @@
 
 package com.kaloer.yummly;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kaloer.yummly.models.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kaloer.yummly.models.Flavors;
-import com.kaloer.yummly.models.NutritionRange;
-import com.kaloer.yummly.models.Parameter;
-import com.kaloer.yummly.models.Recipe;
-import com.kaloer.yummly.models.SearchResult;
+import java.util.List;
 
 /**
  * Main class for interacting with the Yummly api.
@@ -68,6 +65,10 @@ public class Yummly {
 	 */
 	public SearchResult search(String query) throws IOException {
 		return search(query, false, null, null, -1, null, null, false, false, null);
+	}
+
+	public SearchResult search(String query, List<String> requiredIngredients) throws IOException {
+		return search(query, false, requiredIngredients, null, -1, null, null, false, false, null);
 	}
 
 	/**
@@ -111,6 +112,7 @@ public class Yummly {
 	 * @param dietFacetField
 	 *            If true, the result will contain the total count of each
 	 *            diet in the matched recipes.
+	 * @param nutritionRanges
 	 * @return The result of the search. Be aware that the the returned recipes
 	 *         are sparse. Use the {@link #getRecipe(String)} method to receive
 	 *         all available information.
@@ -118,11 +120,11 @@ public class Yummly {
 	 *             Thrown if network or parsing errors occur.
 	 */
 	public SearchResult search(String query, boolean requirePictures,
-			ArrayList<String> requiredIngredients,
-			ArrayList<String> excludedIngredients, int maxTotalTimeInSeconds,
-			Flavors minFlavors, Flavors maxFlavors,
-			boolean ingredientFacetField, boolean dietFacetField,
-			ArrayList<NutritionRange> nutritionRanges)
+							   List<String> requiredIngredients,
+							   List<String> excludedIngredients, int maxTotalTimeInSeconds,
+							   Flavors minFlavors, Flavors maxFlavors,
+							   boolean ingredientFacetField, boolean dietFacetField,
+							   List<NutritionRange> nutritionRanges)
 			throws IOException {
 
 		// Set parameters.
