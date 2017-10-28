@@ -1,29 +1,26 @@
 package com.github.gnoely.twitter
 
+import com.twitter.hbc.ClientBuilder
 import com.twitter.hbc.core.Constants
 import com.twitter.hbc.core.Hosts
 import com.twitter.hbc.core.HttpHosts
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint
 import com.twitter.hbc.core.event.Event
+import com.twitter.hbc.core.processor.StringDelimitedProcessor
 import com.twitter.hbc.httpclient.auth.Authentication
 import com.twitter.hbc.httpclient.auth.OAuth1
+import com.twitter.hbc.twitter4j.Twitter4jStatusClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.LinkedBlockingQueue
-import com.twitter.hbc.core.processor.StringDelimitedProcessor
-import com.twitter.hbc.ClientBuilder
-import com.twitter.hbc.httpclient.BasicClient
-import com.google.common.collect.Lists
-import com.twitter.hbc.core.endpoint.StatusesFirehoseEndpoint
-import com.twitter.hbc.core.endpoint.StreamingEndpoint
-import com.twitter.hbc.twitter4j.Twitter4jStatusClient
 import twitter4j.StallWarning
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
 import twitter4j.StatusListener
-import twitter4j.examples.tweets.TwitterOut
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
+import java.util.concurrent.LinkedBlockingQueue
 
 
 @Component
@@ -49,7 +46,7 @@ class TwitterIn {
 
     private val listener1 = object : StatusListener {
         override fun onStatus(status: Status) {
-            twitterOut.send(status.user.name, "Bad user, no recipe for you")
+            twitterOut.send(status.user.screenName, " - Bad user, no recipe for you: " + LocalTime.now().toString())
             println(status)
 
         }
@@ -79,7 +76,7 @@ class TwitterIn {
     fun connect()  {
         val hosebirdEndpoint = StatusesFilterEndpoint()
 
-        val terms : List<String> = listOf("BalmerPeakyB")
+        val terms : List<String> = listOf("BallmerPeakyB")
         hosebirdEndpoint.trackTerms(terms)
 
         val builder = ClientBuilder()
