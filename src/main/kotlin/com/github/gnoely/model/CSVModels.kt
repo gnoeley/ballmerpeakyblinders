@@ -1,35 +1,30 @@
 package com.github.gnoely.model
 
-import com.github.gnoely.model.filereader.FileReader
-import java.util.concurrent.TimeUnit
+import org.springframework.boot.SpringApplication
+
+import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Bean
 
 data class Aisle(val aisleId: Int, val asile: String)
 
 data class Department(val departmentId: Int, val department: String)
 
-data class OrderProducts(val orderId: Int, val productId: String, val addToCartOrder: Int, val reordered: Boolean)
+@SpringBootApplication
+open class Application {
 
-data class Order(val orderId: Int,
-                 val userId: String,
-                 val evalSet: Boolean,
-                 val orderNumber: Int,
-                 val orderDayOfTheWeek: Int,
-                 val orderHourOfDay: Int,
-                 val daysSincePriorOrder: Int)
-
-object Main {
-    @Throws(Exception::class)
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val start: Long = System.nanoTime()
-
-        val aisleStrings: List<String> = FileReader.readFile("./data/raw/aisles.csv");
-        val aisles: List<Aisle> = aisleStrings.map {
-            val splitString: List<String> = it.split(',');
-            Aisle(splitString[0].toInt(), splitString[1])
+    @Bean
+    open fun commandLineRunner(repo: OrderRepository): CommandLineRunner {
+        return CommandLineRunner {
+            println("STARTED!")
         }
-        aisles.forEach{ println(it)}
+    }
+}
 
+fun main(args: Array<String>) {
+    SpringApplication.run(Application::class.java, *args)
+
+//        val start: Long = System.nanoTime()
 //        val asilesFiles: List<Aisle> = Files.readAllLines(Paths.get("./data/raw/aisles.csv"))
 //                .parallelStream()
 //                .skip(1)
@@ -39,8 +34,7 @@ object Main {
 //                })
 ////                .limit(10)
 //                .collect(Collectors.toList())
-
-        val end: Long = System.nanoTime()
-        println("DONE: ${TimeUnit.NANOSECONDS.toMillis(end-start)}ms")
-    }
+//
+//        val end: Long = System.nanoTime()
+//        println("DONE: ${TimeUnit.NANOSECONDS.toMillis(end-start)}ms")
 }
