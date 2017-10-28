@@ -4,6 +4,7 @@ import au.com.console.jpaspecificationdsl.*
 import javax.persistence.*
 
 @Entity
+@Table(name="orders")
 data class Order(
         @Id
         @Column(name="order_id")
@@ -16,15 +17,16 @@ data class Order(
         val daysSincePriorOrder: Int,
         @OneToMany
         @JoinTable(
-                name = "ORDER_PRODUCTS_TRAIN",
-                joinColumns = arrayOf(JoinColumn(name = "ORDER_ID")),
-                inverseJoinColumns = arrayOf(JoinColumn(name="PRODUCT_ID"))
+                name = "order_products_train",
+                joinColumns = arrayOf(JoinColumn(name = "order_id")),
+                inverseJoinColumns = arrayOf(JoinColumn(name="product_id"))
         )
         val productsTrain: List<Product>,
+        @OneToMany
         @JoinTable(
-                name = "ORDER_PRODUCTS_PRIOR",
-                joinColumns = arrayOf(JoinColumn(name = "ORDER_ID")),
-                inverseJoinColumns = arrayOf(JoinColumn(name="PRODUCT_ID"))
+                name = "order_products_prior",
+                joinColumns = arrayOf(JoinColumn(name = "order_id")),
+                inverseJoinColumns = arrayOf(JoinColumn(name="product_id"))
         )
         val productsPrior: List<Product>
 )
@@ -42,6 +44,8 @@ data class Product(
         @Id
         @Column(name="product_id")
         val id: String,
+//        @ManyToOne
+//        val orders: List<Order>,
         val name: String,
         val aisleId: String,
         val departmentId: String
