@@ -1,7 +1,6 @@
 package com.github.gnoely.controller
 
-import com.github.gnoely.twitter.TwitterClient
-import com.github.gnoely.twitter.TwitterConfiguration
+import com.github.gnoely.twitter.TwitterIn
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class HelloController {
 
-    @Autowired internal lateinit var twitterClient: TwitterClient
+    @Autowired internal lateinit var twitterIn: TwitterIn
 
 
     @GetMapping("/hello")
@@ -21,7 +20,7 @@ class HelloController {
 
     @GetMapping("/connect")
     fun connect(): String {
-        twitterClient.connect()
+        twitterIn.connect()
         return java.lang.String.valueOf("connected")
     }
 

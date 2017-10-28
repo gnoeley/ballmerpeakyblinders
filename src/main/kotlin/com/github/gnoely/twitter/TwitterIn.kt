@@ -22,14 +22,15 @@ import twitter4j.StallWarning
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
 import twitter4j.StatusListener
+import twitter4j.examples.tweets.TwitterOut
 import java.util.concurrent.Executors
 
 
 @Component
-class TwitterClient {
+class TwitterIn {
 
     @Autowired lateinit var twitterConfig : TwitterConfiguration
-
+    @Autowired lateinit var twitterOut : TwitterOut
 
     /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
     private val msgQueue : BlockingQueue<String> = LinkedBlockingQueue<String>(100000)
@@ -48,6 +49,7 @@ class TwitterClient {
 
     private val listener1 = object : StatusListener {
         override fun onStatus(status: Status) {
+            twitterOut.send(status.user.name, "Bad user, no recipe for you")
             println(status)
 
         }
