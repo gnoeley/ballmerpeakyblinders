@@ -1,8 +1,12 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: ''
   h2:
     console:
       enabled: true
       path: /h2-console
+
+  datasource:
+    data: classpath:db/data.sql
+    schema: classpath:db/schema.sql
