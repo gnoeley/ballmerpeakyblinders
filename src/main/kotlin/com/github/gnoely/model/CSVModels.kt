@@ -2,8 +2,10 @@ package com.github.gnoely.model
 
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.concurrent.TimeUnit
+import java.util.stream.Collectors
 
-data class Aisle(val aisleId: String, val asile: String)
+data class Aisle(val aisleId: Int, val asile: String)
 
 data class Department(val departmentId: Int, val department: String)
 
@@ -21,14 +23,18 @@ object Main {
     @Throws(Exception::class)
     @JvmStatic
     fun main(args: Array<String>) {
-        Files.readAllLines(Paths.get("./data/raw/aisles.csv"))
+        val start: Long = System.nanoTime()
+        val asilesFiles: List<Aisle> = Files.readAllLines(Paths.get("./data/raw/aisles.csv"))
                 .parallelStream()
                 .skip(1)
                 .map({
                     val csv: List<String> = it.split(',')
-                    Aisle(csv[0], csv[1])
+                    Aisle(csv[0].toInt(), csv[1])
                 })
-                .limit(10)
-                .forEach({ println(it) })
+//                .limit(10)
+                .collect(Collectors.toList())
+
+        val end: Long = System.nanoTime()
+        println("DONE: ${TimeUnit.NANOSECONDS.toMillis(end-start)}ms")
     }
 }
