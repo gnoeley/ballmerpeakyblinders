@@ -7,16 +7,16 @@ object MessageGenerator {
 
     fun generateMessage(recipe: Recipe, ingredients: List<String>) : String {
         val url = recipe.attribution.url
-        var ingredientsString = getIngredientsString(ingredients)
-        val message = "$ingredientsString<a href=\"$url\">${recipe.name}</a>"
+        val ingredientsString = getIngredientsString(arrayListOf())
+        val message = "$ingredientsString ${recipe.name} $url"
         return message
     }
 
     fun getIngredientsString(ingredients: List<String>) : String {
         val size = ingredients.size
-        if (size == 0) return "We recommend "
+        if (size == 0) return "We recommend"
         val preamble = "It looks like you buy a lot of "
-        val ending = ". Based on this we recommend "
+        val ending = ". Based on this we recommend"
         if (size == 1) {
             return preamble + ingredients[0] + ending
         } else {

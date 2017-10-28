@@ -4,9 +4,9 @@ import com.github.gnoely.messageconverter.TwitterMessageConverter
 import com.github.gnoely.messagegenerator.MessageGenerator
 import com.github.gnoely.recipe.RecipeService
 
-object DoEverythingService {
+object ReplyBuildingService {
 
-    fun doEverything(handle: String, message: String) : String {
+    fun buildReply(handle: String, message: String) : String {
         val query = TwitterMessageConverter.convertMessageToQuery(handle, message)
         val ingredients = getIngredients()
         val recipe = RecipeService.getFirstRecipeForQueryIncluding(query, ingredients)
@@ -21,6 +21,6 @@ object DoEverythingService {
 }
 
 fun main(args: Array<String>) {
-    val message = DoEverythingService.doEverything("HackManchester2017", "Hello HackManchester2017 curry")
+    val message = ReplyBuildingService.buildReply("HackManchester2017", "Hello HackManchester2017 curry")
     println(message)
 }

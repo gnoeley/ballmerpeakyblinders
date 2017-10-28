@@ -17,7 +17,8 @@ object YummlyClient {
 
     fun searchForRecipeIncluding(query: String, ingredients: List<String>) : Recipe {
         val searchResult: SearchResult = yummly.search(query, ingredients)
-        return searchResult.matches[0]
+        val partialRecipe = searchResult.matches[0]
+        return yummly.getRecipe(partialRecipe.id)
     }
 
 }
