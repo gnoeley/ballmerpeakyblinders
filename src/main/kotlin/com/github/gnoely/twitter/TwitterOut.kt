@@ -19,16 +19,19 @@ import javax.annotation.PostConstruct
 class TwitterOut {
 
     @Autowired lateinit var config : TwitterConfiguration
+    @Autowired lateinit var limitListener : RateLimitListener
+
 
     val twitter = TwitterFactory().instance!!
 
 
     @PostConstruct
-    fun auth() {
+    private fun auth() {
         // The factory instance is re-useable and thread safe.
         val accessToken = loadAccessToken()
         twitter.setOAuthConsumer(config.getConsumerKey(), config.getConsumerSecret())
         twitter.oAuthAccessToken = accessToken
+        twitter.addRateLimitStatusListener(limitListener)
     }
 
     fun send(mentionUser : String , body : String) {
@@ -38,11 +41,12 @@ class TwitterOut {
 
     }
 
-    fun buildMessage(mentionUser : String , body : String): String {
+
+    private fun buildMessage(mentionUser : String , body : String): String {
         return "@$mentionUser $body"
     }
 
-    fun loadAccessToken() : AccessToken  {
+    private fun loadAccessToken() : AccessToken  {
         val token = config.getAccessToken()
         val secret = config.getAccessTokenSecret()
 

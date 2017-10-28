@@ -12,11 +12,6 @@ import com.twitter.hbc.httpclient.auth.OAuth1
 import com.twitter.hbc.twitter4j.Twitter4jStatusClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import twitter4j.StallWarning
-import twitter4j.Status
-import twitter4j.StatusDeletionNotice
-import twitter4j.StatusListener
-import java.time.LocalTime
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
@@ -28,6 +23,7 @@ class TwitterIn {
 
     @Autowired lateinit var twitterConfig : TwitterConfiguration
     @Autowired lateinit var twitterOut : TwitterOut
+    @Autowired lateinit var listener : Listener
 
     /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
     private val msgQueue : BlockingQueue<String> = LinkedBlockingQueue<String>(100000)
@@ -39,28 +35,8 @@ class TwitterIn {
     // Optional: set up some followings and track terms
 
 
-
-
     val numProcessingThreads : Int = 4
 
-
-    private val listener1 = object : StatusListener {
-        override fun onStatus(status: Status) {
-            twitterOut.send(status.user.screenName, " - Bad user, no recipe for you: " + LocalTime.now().toString())
-            println(status)
-
-        }
-
-        override fun onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) {}
-
-        override fun onTrackLimitationNotice(limit: Int) {}
-
-        override fun onScrubGeo(user: Long, upToStatus: Long) {}
-
-        override fun onStallWarning(warning: StallWarning) {}
-
-        override fun onException(e: Exception) {}
-    }
 
     private fun auth() : Authentication {
         return OAuth1(
@@ -70,11 +46,15 @@ class TwitterIn {
                 twitterConfig.getAccessTokenSecret())
     }
 
+
+
     @PostConstruct
     fun connect()  {
         val hosebirdEndpoint = StatusesFilterEndpoint()
 
         val terms : List<String> = listOf(twitterConfig.getListenFor())
+
+
         hosebirdEndpoint.trackTerms(terms)
 
         val builder = ClientBuilder()
@@ -91,10 +71,12 @@ class TwitterIn {
         val service = Executors.newFixedThreadPool(numProcessingThreads)
 
 
-        val t4jClient = Twitter4jStatusClient(hosebirdClient, msgQueue, listOf(listener1), service)
+        val t4jClient = Twitter4jStatusClient(hosebirdClient, msgQueue, listOf(listener), service)
 
         // Establish a connection
         t4jClient.connect()
+
+        println("Connected stream listener")
 
         for (threads in 0 until numProcessingThreads) {
             // This must be called once per processing thread
