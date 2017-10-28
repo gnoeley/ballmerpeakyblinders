@@ -3,7 +3,7 @@ package com.github.gnoely.model
 import java.nio.file.Files
 import java.nio.file.Paths
 
-data class Aisle(val aisleId: Int, val asile: String)
+data class Aisle(val aisleId: String, val asile: String)
 
 data class Department(val departmentId: Int, val department: String)
 
@@ -22,9 +22,13 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         Files.readAllLines(Paths.get("./data/raw/aisles.csv"))
-                .stream()
+                .parallelStream()
                 .skip(1)
+                .map({
+                    val csv: List<String> = it.split(',')
+                    Aisle(csv[0], csv[1])
+                })
                 .limit(10)
-                .map({ println(it) })
+                .forEach({ println(it) })
     }
 }
