@@ -12,4 +12,10 @@ data class Aisle(
         val aisle: String = ""
 )
 
-data class Department(val departmentId: Int, val department: String)
+@Entity
+data class Department(
+        @Id
+        @Column(name="department_id")
+        val departmentId: Int,
+        val department: String
+)

@@ -6,6 +6,7 @@ import javax.persistence.*
 @Entity
 data class Order(
         @Id
+        @Column(name="order_id")
         val id: String,
         val userId: String,
         val evalSet: Boolean,
@@ -15,11 +16,17 @@ data class Order(
         val daysSincePriorOrder: Int,
         @OneToMany
         @JoinTable(
-                name = "ORDER_PRODUCTS",
+                name = "ORDER_PRODUCTS_TRAIN",
                 joinColumns = arrayOf(JoinColumn(name = "ORDER_ID")),
                 inverseJoinColumns = arrayOf(JoinColumn(name="PRODUCT_ID"))
         )
-        val products: List<Product>
+        val productsTrain: List<Product>,
+        @JoinTable(
+                name = "ORDER_PRODUCTS_PRIOR",
+                joinColumns = arrayOf(JoinColumn(name = "ORDER_ID")),
+                inverseJoinColumns = arrayOf(JoinColumn(name="PRODUCT_ID"))
+        )
+        val productsPrior: List<Product>
 )
 
 //@Entity
@@ -33,6 +40,7 @@ data class Order(
 @Entity
 data class Product(
         @Id
+        @Column(name="product_id")
         val id: String,
         val name: String,
         val aisleId: String,
