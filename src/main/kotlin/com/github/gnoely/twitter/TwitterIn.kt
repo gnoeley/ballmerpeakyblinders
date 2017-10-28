@@ -16,7 +16,6 @@ import twitter4j.StallWarning
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
 import twitter4j.StatusListener
-import java.time.LocalDate
 import java.time.LocalTime
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
@@ -75,7 +74,7 @@ class TwitterIn {
     fun connect()  {
         val hosebirdEndpoint = StatusesFilterEndpoint()
 
-        val terms : List<String> = listOf("BallmerPeakyB")
+        val terms : List<String> = listOf(twitterConfig.getListenFor())
         hosebirdEndpoint.trackTerms(terms)
 
         val builder = ClientBuilder()
