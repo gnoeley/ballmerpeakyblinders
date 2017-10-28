@@ -9,7 +9,7 @@ class YummlyClientTest {
 
     @Test
     fun testGetRecipe() {
-        val recipes = YummlyClient.getRecipe("tomato")
+        val recipes = YummlyClient.searchForRecipeIncluding("tomato")
         println(recipes)
     }
 
