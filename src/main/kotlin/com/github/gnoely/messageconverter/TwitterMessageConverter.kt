@@ -16,7 +16,11 @@ class TwitterMessageConverter {
     }
 
     private fun everythingAfterKeyword(handle: String, message: String) : String {
-        return convertSpaces(message.split(handle + " ")[1])
+        val split = message.split(handle + " ")
+        if (split.size < 2) {
+            return ""
+        }
+        return convertSpaces(split[1])
     }
 
     private fun convertSpaces(query: String) : String {

@@ -1,5 +1,6 @@
 package com.github.gnoely.controller
 
+import com.github.gnoely.model.Reply
 import com.github.gnoely.model.ReplyBuildingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,8 +15,8 @@ class MessageInController {
     @PostMapping("/message")
     @ResponseBody
     fun sendMessage(message: String): String {
-        val reply = replyBuildingService.buildReply(message)
-        return "{reply: $reply}"
+        val reply: Reply = replyBuildingService.buildReply(message)
+        return "{reply: ${reply.message}, image: ${reply.imageUrl}}"
     }
 
 

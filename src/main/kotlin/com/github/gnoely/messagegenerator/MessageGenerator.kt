@@ -1,15 +1,18 @@
 package com.github.gnoely.messagegenerator
 
+import com.github.gnoely.model.Reply
 import com.kaloer.yummly.models.Attribution
 import com.kaloer.yummly.models.Recipe
 
 object MessageGenerator {
 
-    fun generateMessage(recipe: Recipe, ingredients: List<String>) : String {
+    fun generateMessage(recipe: Recipe, ingredients: List<String>): Reply {
         val url = recipe.attribution.url
         val ingredientsString = getIngredientsString(arrayListOf())
         val message = "$ingredientsString ${recipe.name} $url"
-        return message
+        val images = recipe.images
+        val imageUrl = if (images != null) images[0].hostedSmallUrl else null
+        return Reply(message, imageUrl)
     }
 
     fun getIngredientsString(ingredients: List<String>) : String {

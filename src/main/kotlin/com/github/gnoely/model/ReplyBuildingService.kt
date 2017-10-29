@@ -11,7 +11,7 @@ class ReplyBuildingService {
 
     @Autowired lateinit var twitterMessageConverter : TwitterMessageConverter
 
-    fun buildReply(message: String) : String {
+    fun buildReply(message: String) : Reply {
         val query = twitterMessageConverter.convertMessageToQuery(message)
         val ingredients = getIngredients()
         val recipe = RecipeService.getFirstRecipeForQueryIncluding(query, ingredients)
