@@ -23,18 +23,7 @@ class SlotTypes {
     var valueSelectionStrategy: String = "TOP_RESOLUTION"
 
 }
-
-class RawData {
-    var searchValue : String = ""
-    var description : String = ""
-    var term : String = ""
-}
-
-
 fun main(args: Array<String>) {
-
-
-
 
     val path = Paths.get(TwitterMessageConverter::class.java.classLoader
         .getResource("yumly-incredients.txt")!!.toURI())

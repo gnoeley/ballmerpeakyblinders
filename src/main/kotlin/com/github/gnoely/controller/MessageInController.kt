@@ -1,7 +1,7 @@
 package com.github.gnoely.controller
 
 import com.github.gnoely.model.Reply
-import com.github.gnoely.model.ReplyBuildingService
+import com.github.gnoely.service.ReplyBuildingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.ResponseBody

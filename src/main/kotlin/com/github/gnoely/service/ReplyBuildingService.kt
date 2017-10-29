@@ -1,8 +1,8 @@
-package com.github.gnoely.model
+package com.github.gnoely.service
 
 import com.github.gnoely.messageconverter.TwitterMessageConverter
 import com.github.gnoely.messagegenerator.MessageGenerator
-import com.github.gnoely.recipe.RecipeService
+import com.github.gnoely.model.Reply
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

@@ -1,5 +1,6 @@
-package com.github.gnoely.recipe
+package com.github.gnoely.service
 
+import com.github.gnoely.recipe.YummlyClient
 import com.kaloer.yummly.models.Recipe
 import java.util.*
 

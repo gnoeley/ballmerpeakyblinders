@@ -3,7 +3,9 @@ package com.github.gnoely.lex
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.PostTextRequest
 import com.amazonaws.services.lexruntime.model.PostTextResult
+import org.springframework.stereotype.Component
 
+@Component
 class LexClient {
 
     var lexRuntimeAsyncClient = AmazonLexRuntimeClientBuilder.defaultClient()
@@ -20,11 +22,6 @@ class LexClient {
 
         return lexRuntimeAsyncClient.postText(request)
     }
-
-
-
-
-
 
 }
 
