@@ -17,7 +17,7 @@ import kotlin.streams.toList
 @SpringBootApplication
 class Application {
 
-    @Bean
+//    @Bean
     fun dumpDataForRecommendations(service: OrderService, productService: ProductService): CommandLineRunner {
         val fileName = "/Users/leon.pelech/recom_dump"
         val fileExt = ".csv"
