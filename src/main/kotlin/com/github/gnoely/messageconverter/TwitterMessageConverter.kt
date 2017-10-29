@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 
 @Component
-object TwitterMessageConverter {
+class TwitterMessageConverter {
 
     @Autowired lateinit var twitterConfig : TwitterConfiguration
 
@@ -25,7 +25,3 @@ object TwitterMessageConverter {
 
 }
 
-fun main(args: Array<String>) {
-    val message = "Hello there HackManchester2017 I'd like some chicken tonight"
-    println(TwitterMessageConverter.convertMessageToQuery(message))
-}

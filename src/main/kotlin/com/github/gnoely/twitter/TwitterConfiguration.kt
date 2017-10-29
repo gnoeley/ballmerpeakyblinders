@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment
 @Configuration
 @PropertySource("classpath:/secret/twitter.properties")
 class TwitterConfiguration {
+
     @Autowired
     internal var env: Environment? = null
 

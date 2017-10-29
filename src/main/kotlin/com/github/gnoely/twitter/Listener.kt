@@ -13,9 +13,10 @@ import java.time.LocalTime
 class Listener : StatusListener {
 
     @Autowired lateinit var twitterOut : TwitterOut
+    @Autowired lateinit var replyBuildingService : ReplyBuildingService
 
     override fun onStatus(status: Status) {
-        val message = ReplyBuildingService.buildReply(status.text)
+        val message = replyBuildingService.buildReply(status.text)
         twitterOut.sendReply(status.id, status.user.screenName, message + " " + LocalTime.now().toString())
         println(status)
 

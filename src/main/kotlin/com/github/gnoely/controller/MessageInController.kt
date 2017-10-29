@@ -1,6 +1,7 @@
 package com.github.gnoely.controller
 
 import com.github.gnoely.model.ReplyBuildingService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
@@ -8,10 +9,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class MessageInController {
 
+    @Autowired lateinit var replyBuildingService: ReplyBuildingService
+
     @PostMapping("/message")
     @ResponseBody
     fun sendMessage(message: String): String {
-        val reply = ReplyBuildingService.buildReply("HackManchester2017", message)
+        val reply = replyBuildingService.buildReply(message)
         return "{reply: $reply}"
     }
 
