@@ -20,7 +20,7 @@ class Listener : StatusListener {
 
     override fun onStatus(status: Status) {
         // Send status to conversation service
-         conversationService.handleMessage(status)
+         conversationService.handleMessage(status.user.screenName, status.user.name, status.id, status.inReplyToStatusId, status.inReplyToScreenName, status.text)
 //        val reply: Reply = replyBuildingService.buildReply(status.text)
 //        twitterOut.sendReply(status.id, status.user.screenName, reply.message + " " + LocalTime.now().toString(), reply.imageUrl)
 //        println(status)

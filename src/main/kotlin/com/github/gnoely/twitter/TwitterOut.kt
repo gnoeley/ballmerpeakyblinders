@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
+import twitter4j.Status
 import twitter4j.StatusUpdate
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
@@ -46,17 +47,20 @@ class TwitterOut {
         twitter.addRateLimitStatusListener(limitListener)
     }
 
-    fun sendReply(originalStatusId : Long, mentionUser : String , body : String, imageUrl: String?) {
+    fun sendReply(originalStatusId : Long, mentionUser : String , body : String, imageUrl: String?): Long {
         val message = buildMessage(originalStatusId, mentionUser, body, imageUrl)
+        var status : Status? = null
         if (enabled) {
-            val status = twitter.updateStatus(message)
+           status = twitter.updateStatus(message)
             println("Successfully updated the status to [" + status.text + "].")
         } else {
             println(">>> Outbound tweets disabled -> would have sent message ${message.status}")
         }
 
-        val status = twitter.updateStatus(buildMessage(originalStatusId, mentionUser, body, imageUrl))
+        status = twitter.updateStatus(buildMessage(originalStatusId, mentionUser, body, imageUrl))
         println("Successfully updated the status to [" + status.text + "].")
+
+        return status?.id ?: 0
 
     }
 

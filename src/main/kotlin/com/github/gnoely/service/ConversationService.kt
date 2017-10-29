@@ -21,44 +21,63 @@ class ConversationService {
 
     private val sessions : MutableList<Session> = mutableListOf()
 
-    private fun getSession(tweet: Status) : Session {
+    private fun getSession(
+        fromScreenName: String,
+        fromUserName : String,
+        inReplyToStatusId : Long,
+        inReplyToScreenName : String  ) : Session {
+
+
         var session : Session? = null
 
-        if (tweet.inReplyToStatusId > 0 && tweet.inReplyToScreenName == "BallmerPeakyB") {
-            session = sessions.find { it.lastStatusIdFromUs == tweet.inReplyToStatusId }
+        if (inReplyToStatusId > 0 && inReplyToScreenName == "BallmerPeakyB") {
+            session = sessions.find { it.lastStatusIdFromUs == inReplyToStatusId }
         }
 
         if (session == null) {
-            session = Session(userHandle = tweet.user.screenName,
-                userName = tweet.user.name,
+            session = Session(userHandle = fromScreenName,
+                userName = fromUserName,
                 sessionId = UUID.randomUUID().toString())
         }
         return session
     }
 
-    fun handleMessage(incomingStatus: Status) {
-        val session = getSession(incomingStatus)
-        val result = lexClient.sendTextToLex(incomingStatus.text, session.sessionId)
+    fun handleMessage(
+        fromScreenName: String,
+        fromUserName : String,
+        statusId : Long,
+        inReplyToStatusId : Long,
+        inReplyToScreenName : String,
+        messageText : String ) {
+
+
+
+        val session = getSession(fromScreenName, fromUserName, inReplyToStatusId, inReplyToScreenName)
+        val result = lexClient.sendTextToLex(messageText, session.sessionId)
+
+
 
         if (READY_FOR_FULFILLMENT.equals(result?.dialogState)) {
             if (PERSONAL_RECOMMMENDATION_INENT.equals(result?.intentName)) {
                 val reply = replyBuilderService.buildReply(session.userHandle, emptyList())
-                twitterOut.sendReply(incomingStatus.id, incomingStatus.user.screenName, reply.message, reply.imageUrl)
+                twitterOut.sendReply(statusId, fromScreenName, reply.message, reply.imageUrl)
 
             } else {
                 val ingredients = mutableListOf<String>()
                 result?.slots?.get("ingredientsOne")?.let { ingredients.add(it) }
                 result?.slots?.get("ingredientsTwo")?.let { ingredients.add(it) }
                 val reply = replyBuilderService.buildReply(session.userHandle, ingredients)
-                twitterOut.sendReply(incomingStatus.id, incomingStatus.user.screenName, reply.message, reply.imageUrl)
+                twitterOut.sendReply(statusId, fromScreenName, reply.message, reply.imageUrl)
+
+                session.lastStatusIdFromUs
 
             }
 
         } else if (FAILED.equals(result?.dialogState)){
-            println("FAILED: $result $incomingStatus $session")
+            println("FAILED: $result $fromScreenName $messageText $session")
 
         } else {
-            twitterOut.sendReply(incomingStatus.id, incomingStatus.user.screenName, result?.message ?: "", null)
+            twitterOut.sendReply(statusId, fromScreenName, result?.message ?: "", null)
 
         }
     }
