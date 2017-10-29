@@ -6,32 +6,32 @@ import com.amazonaws.services.lexruntime.AmazonLexRuntime
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.PostTextRequest
 import com.amazonaws.services.lexruntime.model.PostTextResult
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
+import javax.annotation.PostConstruct
 
 @Component
-@PropertySource("classpath:/secret/aws.properties")
 class LexClient {
 
-    var accessKeyId = ""
-
-    var secretKey = ""
+    @Autowired lateinit var awsConfiguration : AwsConfiguration
 
     val REGION = "us-east-1"
 
     var lexRuntimeAsyncClient: AmazonLexRuntime? = null
 
-    init {
+    @PostConstruct
+    fun setup() {
         val lexRuntimeAsyncClientBuilder = AmazonLexRuntimeClientBuilder.standard()
         lexRuntimeAsyncClientBuilder.region = REGION
         lexRuntimeAsyncClientBuilder.withCredentials(AWSStaticCredentialsProvider(object : AWSCredentials  {
 
             override fun getAWSAccessKeyId(): String {
-                return accessKeyId
+                return awsConfiguration.getAccessKeyId()
             }
 
             override fun getAWSSecretKey(): String {
-                return secretKey
+                return awsConfiguration.getAccessKeySecret()
             }
         }))
         lexRuntimeAsyncClient = lexRuntimeAsyncClientBuilder.build()
