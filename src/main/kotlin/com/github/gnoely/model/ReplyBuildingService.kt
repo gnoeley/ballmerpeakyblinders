@@ -20,7 +20,7 @@ class ReplyBuildingService {
 
     private fun getIngredients(): List<String> {
         // hard coded for now...want to call out to DB to get these
-        return arrayListOf("chicken", "naan bread")
+        return arrayListOf()
     }
 
 }
