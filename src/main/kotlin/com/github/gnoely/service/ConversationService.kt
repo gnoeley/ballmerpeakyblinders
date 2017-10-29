@@ -28,6 +28,7 @@ class ConversationService {
         inReplyToScreenName : String?  ) : Session {
 
 
+
         var session : Session? = null
 
         if (inReplyToStatusId != null && inReplyToStatusId > 0 && inReplyToScreenName == "BallmerPeakyB") {
@@ -50,6 +51,9 @@ class ConversationService {
         inReplyToScreenName : String?,
         messageText : String ) {
 
+        if (fromScreenName == "BallmerPeakyB") {
+            return
+        }
 
 
         val session = getSession(fromScreenName, fromUserName, inReplyToStatusId, inReplyToScreenName)
