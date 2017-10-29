@@ -13,7 +13,7 @@ object RecipeService {
     }
 
     fun getFirstIncludingIngredients(ingredients: List<String>): Optional<Recipe> {
-        return YummlyClient.searchForRecipeIncluding("", ingredients)
+        return YummlyClient.searchForRecipeIncluding(ingredients.joinToString("+"), ingredients)
     }
 
     fun getFirstRecipeWithCuisine(query: String, ingredients: List<String>, cuisine: Cuisine): Optional<Recipe> {

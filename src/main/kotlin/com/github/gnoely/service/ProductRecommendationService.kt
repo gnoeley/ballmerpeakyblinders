@@ -10,6 +10,7 @@ import org.apache.mahout.cf.taste.recommender.UserBasedRecommender
 import org.apache.mahout.cf.taste.similarity.UserSimilarity
 import org.springframework.stereotype.Service
 import java.io.File
+import java.util.*
 
 @Service
 class ProductRecommendationService(val productRepo: ProductRepository) {
@@ -24,7 +25,7 @@ class ProductRecommendationService(val productRepo: ProductRepository) {
 
         val similarity: UserSimilarity = PearsonCorrelationSimilarity(model)
 
-        val neighborhood = ThresholdUserNeighborhood(0.1, similarity, model)
+        val neighborhood = ThresholdUserNeighborhood(1.0, similarity, model)
 
         recommender = GenericUserBasedRecommender(model, neighborhood, similarity)
     }
