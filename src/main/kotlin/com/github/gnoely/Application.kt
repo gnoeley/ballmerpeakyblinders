@@ -1,6 +1,6 @@
 package com.github.gnoely
 
-import com.github.gnoely.repository.AisleRepository
+import com.github.gnoely.service.OrderService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -8,13 +8,16 @@ import org.springframework.context.annotation.Bean
 
 
 @SpringBootApplication
-open class Application {
+class Application {
 
     @Bean
-    open fun commandLineRunner(repo: AisleRepository): CommandLineRunner {
+    fun commandLineRunner(service: OrderService): CommandLineRunner {
         return CommandLineRunner {
-            println(repo.findOne("1"))
             println("STARTED!")
+            val start = System.nanoTime()
+//            service.findAllProductsForUserId("36335").forEach { println(it) }
+            val end = System.nanoTime()
+            println("FINISHED!: ${end - start}ns")
         }
     }
 }

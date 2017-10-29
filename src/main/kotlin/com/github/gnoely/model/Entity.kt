@@ -1,34 +1,37 @@
 package com.github.gnoely.model
 
-import au.com.console.jpaspecificationdsl.*
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import javax.persistence.*
 
 @Entity
 @Table(name="orders")
 data class Order(
-        @Id
+    @Id
         @Column(name="order_id")
-        val id: String,
-        val userId: String,
-        val evalSet: String,
-        val orderNumber: Int,
-        val orderDayOfTheWeek: Int,
-        val orderHourOfDay: Int,
-        val daysSincePriorOrder: Int,
-        @OneToMany
-        @JoinTable(
-                name = "order_products_train",
-                joinColumns = arrayOf(JoinColumn(name = "order_id")),
-                inverseJoinColumns = arrayOf(JoinColumn(name="product_id"))
-        )
-        val productsTrain: List<Product>,
-        @OneToMany
-        @JoinTable(
-                name = "order_products_prior",
-                joinColumns = arrayOf(JoinColumn(name = "order_id")),
-                inverseJoinColumns = arrayOf(JoinColumn(name="product_id"))
-        )
-        val productsPrior: List<Product>
+        val id: String = "",
+    val userId: String ="",
+    val evalSet: String ="",
+    val orderNumber: Int = -1,
+    val orderDayOfTheWeek: Int = -1,
+    val orderHourOfDay: Int = -1,
+    val daysSincePriorOrder: Int = -1,
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany
+    @JoinTable(
+            name = "orders_products_train",
+            joinColumns = arrayOf(JoinColumn(name = "order_id")),
+            inverseJoinColumns = arrayOf(JoinColumn(name="product_id"))
+    )
+    val productsTrain: List<Product> = emptyList(),
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany
+    @JoinTable(
+            name = "orders_products_prior",
+            joinColumns = arrayOf(JoinColumn(name = "order_id")),
+            inverseJoinColumns = arrayOf(JoinColumn(name="product_id"))
+    )
+    val productsPrior: List<Product> = emptyList()
 )
 
 //@Entity
@@ -43,10 +46,8 @@ data class Order(
 data class Product(
         @Id
         @Column(name="product_id")
-        val id: String,
-//        @ManyToOne
-//        val orders: List<Order>,
-        val name: String,
-        val aisleId: String,
-        val departmentId: String
+        val id: String = "",
+        val name: String = "<UNKNWON>",
+        val aisleId: String = "<UKNOWN>",
+        val departmentId: String = "<UKNOWN>"
 )
