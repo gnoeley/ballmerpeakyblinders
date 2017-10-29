@@ -1,6 +1,7 @@
 package com.github.gnoely.twitter
 
 import com.github.gnoely.model.Reply
+import com.github.gnoely.service.ConversationService
 import com.github.gnoely.service.ReplyBuildingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -15,11 +16,14 @@ class Listener : StatusListener {
 
     @Autowired lateinit var twitterOut : TwitterOut
     @Autowired lateinit var replyBuildingService : ReplyBuildingService
+    @Autowired lateinit var conversationService : ConversationService
 
     override fun onStatus(status: Status) {
-        val reply: Reply = replyBuildingService.buildReply(status.text)
-        twitterOut.sendReply(status.id, status.user.screenName, reply.message + " " + LocalTime.now().toString(), reply.imageUrl)
-        println(status)
+        // Send status to conversation service
+         conversationService.handleMessage(status)
+//        val reply: Reply = replyBuildingService.buildReply(status.text)
+//        twitterOut.sendReply(status.id, status.user.screenName, reply.message + " " + LocalTime.now().toString(), reply.imageUrl)
+//        println(status)
 
     }
 

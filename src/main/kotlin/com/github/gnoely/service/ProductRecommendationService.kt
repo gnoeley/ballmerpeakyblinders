@@ -13,26 +13,26 @@ import java.io.File
 
 @Service
 class ProductRecommendationService(val productRepo: ProductRepository) {
-//
-//    private val recommender: UserBasedRecommender
-//
-//    init {
-//        val userProductHistoryUrl = this.javaClass.getResource("/user_product_history.csv")
-//        val userProductHistoryFile = userProductHistoryUrl?.let { File(it.toURI()) }
-//
-//        val model = FileDataModel(userProductHistoryFile)
-//
-//        val similarity: UserSimilarity = PearsonCorrelationSimilarity(model)
-//
-//        val neighborhood = ThresholdUserNeighborhood(0.1, similarity, model)
-//
-//        recommender = GenericUserBasedRecommender(model, neighborhood, similarity)
-//    }
-//
-//    fun recommendProducts(userId: String): Set<Product> {
-//        val userIdAsLong = userId.toLong()
-//        val productIds = recommender.recommend(userIdAsLong, 10).map { it.itemID.toString() }
-//        return productRepo.findAll(productIds).toHashSet()
-//    }
+
+    private val recommender: UserBasedRecommender
+
+    init {
+        val userProductHistoryUrl = this.javaClass.getResource("/rec_training.csv")
+        val userProductHistoryFile = userProductHistoryUrl?.let { File(it.toURI()) }
+
+        val model = FileDataModel(userProductHistoryFile)
+
+        val similarity: UserSimilarity = PearsonCorrelationSimilarity(model)
+
+        val neighborhood = ThresholdUserNeighborhood(0.1, similarity, model)
+
+        recommender = GenericUserBasedRecommender(model, neighborhood, similarity)
+    }
+
+    fun recommendProducts(userId: String, num: Int): Set<Product> {
+        val userIdAsLong = userId.toLong()
+        val productIds = recommender.recommend(userIdAsLong, num).map { it.itemID.toString() }
+        return productRepo.findAll(productIds).toHashSet()
+    }
 
 }

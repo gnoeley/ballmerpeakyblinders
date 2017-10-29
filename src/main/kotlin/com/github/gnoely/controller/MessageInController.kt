@@ -15,8 +15,9 @@ class MessageInController {
     @PostMapping("/message")
     @ResponseBody
     fun sendMessage(message: String): String {
-        val reply: Reply = replyBuildingService.buildReply(message)
-        return "{reply: ${reply.message}, image: ${reply.imageUrl}}"
+//        val reply: Reply = replyBuildingService.buildReply(message)
+//        return "{reply: ${reply.message}, image: ${reply.imageUrl}}"
+        return "Deprecated... sorry ;-)"
     }
 
 

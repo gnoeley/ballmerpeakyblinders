@@ -45,7 +45,7 @@ data class Product(
         val isFoodDepartment: Boolean = false,
         val isExactIgtMatch: Boolean = false,
         val isIgtMatch: Boolean = false,
-        val rawMatches: String? = ""
+        val rawMatches: String = ""
 )
 
 @Entity

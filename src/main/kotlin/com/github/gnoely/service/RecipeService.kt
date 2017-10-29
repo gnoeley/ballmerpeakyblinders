@@ -11,8 +11,8 @@ object RecipeService {
         return YummlyClient.searchForRecipeIncluding(query)
     }
 
-    fun getFirstRecipeForQueryIncluding(query: String, ingredients: List<String>): Optional<Recipe> {
-        return YummlyClient.searchForRecipeIncluding(query, ingredients)
+    fun getFirstIncludingIngredients(ingredients: List<String>): Optional<Recipe> {
+        return YummlyClient.searchForRecipeIncluding("", ingredients)
     }
 
 
