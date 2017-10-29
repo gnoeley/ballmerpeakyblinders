@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct
 @Component
 class LexClient {
 
-    @Autowired lateinit var awsConfiguration : AwsConfiguration
+//    @Autowired lateinit var awsConfiguration : AwsConfiguration
 
     val REGION = "us-east-1"
 
@@ -22,19 +22,29 @@ class LexClient {
 
     @PostConstruct
     fun setup() {
-        val lexRuntimeAsyncClientBuilder = AmazonLexRuntimeClientBuilder.standard()
-        lexRuntimeAsyncClientBuilder.region = REGION
-        lexRuntimeAsyncClientBuilder.withCredentials(AWSStaticCredentialsProvider(object : AWSCredentials  {
+//        val lexRuntimeAsyncClientBuilder = AmazonLexRuntimeClientBuilder.standard()
+//        lexRuntimeAsyncClientBuilder.region = REGION
+//        lexRuntimeAsyncClientBuilder.withCredentials(
+//
+//            AWSStaticCredentialsProvider(object : AWSCredentials  {
+//
+//            override fun getAWSAccessKeyId(): String {
+//                return awsConfiguration.getAccessKeyId()
+//            }
+//
+//            override fun getAWSSecretKey(): String {
+//                return awsConfiguration.getAccessKeySecret()
+//            }
+//        }))
+//        lexRuntimeAsyncClientBuilder.build()
 
-            override fun getAWSAccessKeyId(): String {
-                return awsConfiguration.getAccessKeyId()
-            }
+        val builder = AmazonLexRuntimeClientBuilder.standard()
+        builder.region = "us-east-1"
 
-            override fun getAWSSecretKey(): String {
-                return awsConfiguration.getAccessKeySecret()
-            }
-        }))
-        lexRuntimeAsyncClient = lexRuntimeAsyncClientBuilder.build()
+
+        lexRuntimeAsyncClient =    builder.build()
+
+
     }
 
     fun sendTextToLex(inputText: String, sessionId: String): PostTextResult? {
