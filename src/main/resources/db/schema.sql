@@ -9,6 +9,8 @@ CREATE INDEX orders_primary ON orders(order_id);
 CREATE INDEX product_id_primary ON product(product_id);
 CREATE INDEX orders_products_train_product_id_foreign ON orders_products_train(product_id);
 CREATE INDEX orders_products_train_order_id_foreign ON orders_products_train(order_id);
+
 CREATE INDEX orders_products_prior_product_id_foreign ON orders_products_prior(product_id);
 CREATE INDEX orders_products_prior_order_id_foreign ON orders_products_prior(order_id);
 CREATE INDEX orders_user ON orders(user_id);
+CREATE INDEX products_name ON products(name);
