@@ -36,7 +36,7 @@ object YummlyClient {
         if (recipes.isEmpty()) {
             return Optional.empty()
         }
-        val partialRecipe = recipes[0]
+        val partialRecipe = recipes[Math.floor(Math.random()*recipes.size).toInt()]
         return Optional.of(yummly.getRecipe(partialRecipe.id))
     }
 
