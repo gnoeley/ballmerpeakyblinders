@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component
 import twitter4j.StatusUpdate
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
-import java.io.File
 import javax.annotation.PostConstruct
 
 
@@ -54,9 +53,9 @@ class TwitterOut {
 
     private fun buildMessage(inReplyToStatusId: Long, mentionUser: String, body: String, imageUrl: String?): StatusUpdate {
         val statusUpdate = StatusUpdate("@$mentionUser $body")
-        if (imageUrl != null) {
-            statusUpdate.media(File(imageUrl))
-        }
+//        if (imageUrl != null) {
+//            statusUpdate.media(File(imageUrl))
+//        }
         statusUpdate.inReplyToStatusId(inReplyToStatusId)
         return statusUpdate
     }

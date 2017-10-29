@@ -3,6 +3,7 @@ package com.github.gnoely.recipe
 import com.kaloer.yummly.Yummly
 import com.kaloer.yummly.models.Recipe
 import com.kaloer.yummly.models.SearchResult
+import java.util.*
 
 object YummlyClient {
 
@@ -15,10 +16,14 @@ object YummlyClient {
         return searchResult.matches[0]
     }
 
-    fun searchForRecipeIncluding(query: String, ingredients: List<String>) : Recipe {
+    fun searchForRecipeIncluding(query: String, ingredients: List<String>) : Optional<Recipe> {
         val searchResult: SearchResult = yummly.search(query, ingredients)
-        val partialRecipe = searchResult.matches[0]
-        return yummly.getRecipe(partialRecipe.id)
+        val recipes = searchResult.matches
+        if (recipes.isEmpty()) {
+            return Optional.empty()
+        }
+        val partialRecipe = recipes[0]
+        return Optional.of(yummly.getRecipe(partialRecipe.id))
     }
 
 }

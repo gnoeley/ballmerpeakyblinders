@@ -3,10 +3,15 @@ package com.github.gnoely.messagegenerator
 import com.github.gnoely.model.Reply
 import com.kaloer.yummly.models.Attribution
 import com.kaloer.yummly.models.Recipe
+import java.util.*
 
 object MessageGenerator {
 
-    fun generateMessage(recipe: Recipe, ingredients: List<String>): Reply {
+    fun generateMessage(recipeOptional: Optional<Recipe>, ingredients: List<String>): Reply {
+        if (!recipeOptional.isPresent) {
+            return Reply("Sorry, we can't find any recipes for you", null)
+        }
+        val recipe = recipeOptional.get()
         val url = recipe.attribution.url
         val ingredientsString = getIngredientsString(arrayListOf())
         val message = "$ingredientsString ${recipe.name} $url"
@@ -48,7 +53,7 @@ fun main(args: Array<String>) {
     recipe.attribution = attribution
     recipe.setRecipeName("Awesome chicken curry")
 
-    val message = MessageGenerator.generateMessage(recipe, arrayListOf("chicken", "milk", "naan bread"))
+    val message = MessageGenerator.generateMessage(Optional.of(recipe), arrayListOf("chicken", "milk", "naan bread"))
     println(message)
 }
 
