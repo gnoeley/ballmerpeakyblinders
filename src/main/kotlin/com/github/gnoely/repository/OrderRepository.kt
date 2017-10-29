@@ -27,7 +27,7 @@ class OrderRepositoryImpl : OrderRepositoryCustom {
     lateinit var entityManager: EntityManager
 
     override fun findAllUniqueUserIds(): Set<String> {
-        return entityManager.createNativeQuery("SELECT DISTINCT user_id FROM orders")
+        return entityManager.createNativeQuery("SELECT user_id FROM (SELECT user_id, count(*) as freq FROM orders GROUP BY user_id ORDER BY freq DESC)")
             .resultList
             .map { it.toString() }
             .toHashSet()

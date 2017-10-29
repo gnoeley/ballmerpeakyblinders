@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
@@ -15,6 +16,30 @@ import kotlin.streams.toList
 
 @SpringBootApplication
 class Application {
+
+    @Bean
+    fun dumpDataForRecommendations(service: OrderService, productService: ProductService): CommandLineRunner {
+        val fileName = "/Users/leon.pelech/recom_dump"
+        val fileExt = ".csv"
+
+        return CommandLineRunner {
+            (0..10).forEach { i ->
+                val start = System.nanoTime()
+                println("STARTED DUMP $i!")
+
+                val fileNameFull = "$fileName-$i$fileExt"
+                File(fileNameFull).printWriter().use { out ->
+                    out.println("userId,productId,freq")
+                    service.dumpUserProductStats(i*1000L, 1000)
+                        .forEach { out.println("${it.userId},${it.productId},${it.count}") }
+                }
+
+                val end = System.nanoTime()
+                println("FINISHED DUMP $i!: ${TimeUnit.NANOSECONDS.toMillis(end - start)}ms")
+            }
+
+        }
+    }
 
     @Bean
     fun commandLineRunner(service: OrderService, productService: ProductService): CommandLineRunner {

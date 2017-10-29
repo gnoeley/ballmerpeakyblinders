@@ -28,8 +28,8 @@ class OrderService(val orderRepo: OrderRepository, val twitterUserRepo: TwitterU
         return if (userId != null) findAllProductsForUserId(userId) else emptySet()
     }
 
-    fun dumpUserProductStats(): List<UserProductStats> {
-        val userIds = orderRepo.findAllUniqueUserIds().stream().limit(10).collect(Collectors.toList())
+    fun dumpUserProductStats(offset: Long, limit: Long): List<UserProductStats> {
+        val userIds = orderRepo.findAllUniqueUserIds().stream().skip(offset).limit(limit).collect(Collectors.toList())
 
         val userIdProductPairs = userIds.map { userId ->
             Pair(userId, orderRepo.findAllByUserId(userId).flatMap { it.productsPrior }.groupingBy { it.id }.eachCount()) }
