@@ -11,23 +11,6 @@ class MessageInController {
     @Autowired lateinit var conversationService: ConversationService
 
 
-    @GetMapping("/message")
-    @ResponseBody
-    fun sendMessage(): String {
-        val reply: Reply = replyBuildingService.buildReply("siladu", emptyList())
-        println(reply.imageUrl)
-        println(reply.message)
-        return "{reply: ${reply.message}, image: ${reply.imageUrl}}"
-//        return "Deprecated... sorry ;-)"
-    }
-
-    @PostMapping("/message")
-    @ResponseBody
-    fun sendMessage(message: String): String {
-        val reply: Reply = replyBuildingService.buildReply(message, emptyList())
-        return "{reply: ${reply.message}, image: ${reply.imageUrl}}"
-//        return "Deprecated... sorry ;-)"
-    }
 
     @GetMapping("/faketweetfrom/{userHandle}")
     @ResponseBody
