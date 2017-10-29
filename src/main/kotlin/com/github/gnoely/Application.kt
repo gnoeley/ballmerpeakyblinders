@@ -42,11 +42,11 @@ fun printFullIngredientContainedInProduct(productService: ProductService) {
     productService.findAllInFoodDepartments()
         .stream()
         .map({it.copy(name=it.name.toLowerCase())})
-//        .limit(10)
+//        .limit(1)
         .forEach {
             val completeWordsInProduct = it.name.split(' ')
-            val matches = ingredients.filter {
-                igt -> it.name.contains(igt) && completeWordsInProduct.contains(igt)
+            val matches = ingredients.filter { igt ->
+                it.name.contains(igt) && completeWordsInProduct.contains(igt)
             }
             if (matches.size > maxMatches) maxMatches = matches.size
             val match = matches.size > 0
@@ -54,8 +54,45 @@ fun printFullIngredientContainedInProduct(productService: ProductService) {
 //            val match = ingredients.any { words.contains(it) }
             if (match) println("${it.name} contains $matches") else println("NO MATCHES for ${it.name}")
             //                if (lines.contains(it.name)) println("${it.id},${it.name}")
+
         }
-    println("MAX MATCHES $maxMatches") //8
+
+    val idsToUpdateWithMatches: List<Pair<String, List<String>>> = productService.findAllInFoodDepartments()
+        .stream()
+//        .limit(10)
+        .map({ original -> original.copy(name = original.name.toLowerCase()) })
+        .filter({
+            val completeWordsInProduct = it.name.split(' ')
+            val matches: List<String> = ingredients.filter { igt ->
+                it.name.contains(igt) && completeWordsInProduct.contains(igt)
+            }
+            matches.size > 0
+        })
+        .map({
+            val completeWordsInProduct = it.name.split(' ')
+            val matches: List<String> = ingredients.filter { igt ->
+                it.name.contains(igt) && completeWordsInProduct.contains(igt)
+            }
+            Pair(it.id, matches)
+        })
+        .toList()
+
+    fun updateProduct(product: Product, matches: List<String>): Product {
+        return product.copy(rawMatches=matches.joinToString(","), isIgtMatch=true)
+    }
+    val productsToUpdate = productService.productRepo.findAll(idsToUpdateWithMatches.map{it.first})
+    val updatedProducts = productsToUpdate.map { prod ->
+        val nullablePair: Pair<String, List<String>>? = idsToUpdateWithMatches.find { it.first.equals(prod.id) }
+        if (nullablePair != null) {
+            updateProduct(prod, nullablePair.second)
+        } else {
+            prod
+        }
+    }
+    updatedProducts.forEach({println(it)})
+    println("ABOUT TO SAVE ${updatedProducts.size}...")
+    productService.productRepo.save(updatedProducts)
+    println("SAVED.")
 }
 
 fun printExactMatch(productService: ProductService) {

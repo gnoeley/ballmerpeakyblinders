@@ -43,7 +43,9 @@ data class Product(
         val aisleId: String = "<UKNOWN>",
         val departmentId: String = "<UKNOWN>",
         val isFoodDepartment: Boolean = false,
-        val isExactIgtMatch: Boolean = false
+        val isExactIgtMatch: Boolean = false,
+        val isIgtMatch: Boolean = false,
+        val rawMatches: String? = ""
 )
 
 @Entity
