@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import java.util.concurrent.TimeUnit
 
 
 @SpringBootApplication
@@ -15,9 +16,9 @@ class Application {
         return CommandLineRunner {
             println("STARTED!")
             val start = System.nanoTime()
-//            service.findAllProductsForUserId("36335").forEach { println(it) }
+//            service.findAllProductsForTwitterHandle("leonpelech").forEach { println(it) }
             val end = System.nanoTime()
-            println("FINISHED!: ${end - start}ns")
+            println("FINISHED!: ${TimeUnit.NANOSECONDS.toMillis(end - start)}ms")
         }
     }
 }

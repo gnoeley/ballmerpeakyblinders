@@ -34,14 +34,6 @@ data class Order(
     val productsPrior: List<Product> = emptyList()
 )
 
-//@Entity
-//data class OrderProducts(
-//        val orderId: String,
-//        val productId: String,
-//        val addToCartOrder: Int,
-//        val reordered: Boolean
-//)
-
 @Entity
 data class Product(
         @Id
@@ -50,4 +42,12 @@ data class Product(
         val name: String = "<UNKNWON>",
         val aisleId: String = "<UKNOWN>",
         val departmentId: String = "<UKNOWN>"
+)
+
+@Entity
+@Table(name="twitter_users")
+data class TwitterUser(
+    @Id
+    val handle: String = "",
+    val userId: String = ""
 )
