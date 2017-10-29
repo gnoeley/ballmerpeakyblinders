@@ -41,7 +41,8 @@ data class Product(
         val id: String = "",
         val name: String = "<UNKNWON>",
         val aisleId: String = "<UKNOWN>",
-        val departmentId: String = "<UKNOWN>"
+        val departmentId: String = "<UKNOWN>",
+        val isFoodDepartment: Boolean = false
 )
 
 @Entity
