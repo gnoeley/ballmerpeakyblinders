@@ -16,7 +16,7 @@ class MessageInController {
     @GetMapping("/message")
     @ResponseBody
     fun sendMessage(): String {
-        val reply: Reply = replyBuildingService.buildReply("@siladu", emptyList())
+        val reply: Reply = replyBuildingService.buildReply("siladu", emptyList())
         println(reply.imageUrl)
         println(reply.message)
         return "{reply: ${reply.message}, image: ${reply.imageUrl}}"
