@@ -64,16 +64,20 @@ public class Yummly {
 	 *             Thrown if network or parsing errors occur.
 	 */
 	public SearchResult search(String query) throws IOException {
-		return search(query, false, null, null, -1, null, null, false, false, null);
+		return search(query, false, null, null, -1, null, null, false, false, null, null);
 	}
 
 	public SearchResult search(String query, List<String> requiredIngredients) throws IOException {
-		return search(query, false, requiredIngredients, null, -1, null, null, false, false, null);
+		return search(query, false, requiredIngredients, null, -1, null, null, false, false, null, null);
 	}
+
+    public SearchResult searchWithCuisine(String query, List<String> ingredients, String cuisine) throws IOException {
+        return search(query, false, ingredients, null, -1, null, null, false, false, null, cuisine);
+    }
 
 	/**
 	 * Searches for recipes matching a given query.
-	 * 
+	 *
 	 * @param query
 	 *            The query to search for.
 	 * @param requirePictures
@@ -86,12 +90,12 @@ public class Yummly {
 	 */
 	public SearchResult search(String query, boolean requirePictures)
 			throws IOException {
-		return search(query, requirePictures, null, null, -1, null, null, false, false, null);
+		return search(query, requirePictures, null, null, -1, null, null, false, false, null, null);
 	}
 
 	/**
 	 * Searches for recipes matching a given query.
-	 * 
+	 *
 	 * @param query
 	 *            The query to search for.
 	 * @param requirePictures
@@ -113,18 +117,19 @@ public class Yummly {
 	 *            If true, the result will contain the total count of each
 	 *            diet in the matched recipes.
 	 * @param nutritionRanges
-	 * @return The result of the search. Be aware that the the returned recipes
+	 * @param cuisine
+     * @return The result of the search. Be aware that the the returned recipes
 	 *         are sparse. Use the {@link #getRecipe(String)} method to receive
 	 *         all available information.
 	 * @throws IOException
 	 *             Thrown if network or parsing errors occur.
 	 */
 	public SearchResult search(String query, boolean requirePictures,
-							   List<String> requiredIngredients,
-							   List<String> excludedIngredients, int maxTotalTimeInSeconds,
-							   Flavors minFlavors, Flavors maxFlavors,
-							   boolean ingredientFacetField, boolean dietFacetField,
-							   List<NutritionRange> nutritionRanges)
+                               List<String> requiredIngredients,
+                               List<String> excludedIngredients, int maxTotalTimeInSeconds,
+                               Flavors minFlavors, Flavors maxFlavors,
+                               boolean ingredientFacetField, boolean dietFacetField,
+                               List<NutritionRange> nutritionRanges, final String cuisine)
 			throws IOException {
 
 		// Set parameters.
@@ -146,6 +151,11 @@ public class Yummly {
 						ingredient, "utf8")));
 			}
 		}
+        if (cuisine != null) {
+            params.add(new Parameter(URLEncoder.encode(
+                "allowedCuisine[]", "utf8"), URLEncoder.encode(cuisine, "utf8")
+            ));
+        }
 
 		if (ingredientFacetField) {
 			params.add(new Parameter(URLEncoder.encode("facetField[]", "utf8"),
@@ -224,7 +234,7 @@ public class Yummly {
 						String.format("nutrition.%s.min", range.getNutrition().toString()), "utf8"), range.getMin().toString()));
 			}
 		}
-		
+
 		// Perform search request.
 		InputStream in = performRequest("recipes", params);
 		// Parse json.
@@ -242,7 +252,7 @@ public class Yummly {
 
 	/**
 	 * Requests information about a recipe with the given id.
-	 * 
+	 *
 	 * @param recipeId
 	 *            The id of the recipe.
 	 * @return The requested recipe.
@@ -270,7 +280,7 @@ public class Yummly {
 
 	/**
 	 * Performs the actual HTTP-request.
-	 * 
+	 *
 	 * @param appendedUrl
 	 *            The specific URL-extension of the api.
 	 * @param parameters
@@ -307,5 +317,4 @@ public class Yummly {
 
 		return urlCon.getInputStream();
 	}
-
 }

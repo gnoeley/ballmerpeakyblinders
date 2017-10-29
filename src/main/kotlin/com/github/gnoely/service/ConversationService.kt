@@ -1,7 +1,6 @@
 package com.github.gnoely.service
 
 import com.github.gnoely.lex.LexClient
-import com.github.gnoely.model.Reply
 import com.github.gnoely.twitter.TwitterOut
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

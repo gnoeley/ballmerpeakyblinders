@@ -1,6 +1,6 @@
 package com.github.gnoely.model
 
-enum class Cuisine(input: String, searchTerm: String?) {
+enum class Cuisine(val input: String, val searchTerm: String?) {
 
     AMERICAN("American", "cuisine^cuisine-american"),
     KID_FRIENDLY("Kid Friendly", "cuisine^cuisine-kid-friendly"),
@@ -28,6 +28,9 @@ enum class Cuisine(input: String, searchTerm: String?) {
     SWEDISH("Swedish", "cuisine^cuisine-swedish"),
     HUNGARIAN("Hungarian", "cuisine^cuisine-hungarian"),
     PORTUGUESE("Portuguese", "cuisine^cuisine-portuguese"),
-    NONE("None", null)
+    NONE("None", null);
 
+}
+
+fun main(args: Array<String>) {
 }

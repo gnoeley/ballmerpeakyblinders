@@ -1,5 +1,6 @@
 package com.github.gnoely.recipe
 
+import com.github.gnoely.model.Cuisine
 import com.kaloer.yummly.Yummly
 import com.kaloer.yummly.models.Recipe
 import com.kaloer.yummly.models.SearchResult
@@ -18,6 +19,19 @@ object YummlyClient {
 
     fun searchForRecipeIncluding(query: String, ingredients: List<String>) : Optional<Recipe> {
         val searchResult: SearchResult = yummly.search(query, ingredients)
+        return getRecipes(searchResult)
+    }
+
+    fun searchForRecipeWithCuisine(query: String, ingredients: List<String>, cuisine: Cuisine): Optional<Recipe> {
+        if (Cuisine.NONE.equals(cuisine)) {
+            return searchForRecipeIncluding(query, ingredients)
+        } else {
+            val searchResult: SearchResult = yummly.searchWithCuisine(query, ingredients, cuisine.searchTerm)
+            return getRecipes(searchResult)
+        }
+    }
+
+    private fun getRecipes(searchResult: SearchResult): Optional<Recipe> {
         val recipes = searchResult.matches
         if (recipes.isEmpty()) {
             return Optional.empty()
