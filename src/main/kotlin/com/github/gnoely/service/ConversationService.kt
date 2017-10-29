@@ -24,13 +24,13 @@ class ConversationService {
     private fun getSession(
         fromScreenName: String,
         fromUserName : String,
-        inReplyToStatusId : Long,
-        inReplyToScreenName : String  ) : Session {
+        inReplyToStatusId : Long?,
+        inReplyToScreenName : String?  ) : Session {
 
 
         var session : Session? = null
 
-        if (inReplyToStatusId > 0 && inReplyToScreenName == "BallmerPeakyB") {
+        if (inReplyToStatusId != null && inReplyToStatusId > 0 && inReplyToScreenName == "BallmerPeakyB") {
             session = sessions.find { it.lastStatusIdFromUs == inReplyToStatusId }
         }
 
@@ -46,8 +46,8 @@ class ConversationService {
         fromScreenName: String,
         fromUserName : String,
         statusId : Long,
-        inReplyToStatusId : Long,
-        inReplyToScreenName : String,
+        inReplyToStatusId : Long?,
+        inReplyToScreenName : String?,
         messageText : String ) {
 
 

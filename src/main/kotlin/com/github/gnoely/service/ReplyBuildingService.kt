@@ -19,6 +19,7 @@ class ReplyBuildingService {
     fun buildReply(twitterHandle: String, ingredients: List<String>) : Reply {
 
         var yummlyIngredients = if (ingredients.isEmpty()) findRecommendedIngredients(twitterHandle) else ingredients
+        println("recommended ingredients: $yummlyIngredients")
         val recipe = RecipeService.getFirstIncludingIngredients(yummlyIngredients)
         return MessageGenerator.generateMessage(recipe, yummlyIngredients)
     }
@@ -31,9 +32,9 @@ class ReplyBuildingService {
     }
 
     fun findRecommendedIngredients(twitterHandle: String): List<String> {
-        val userId = twitterUserRepo.findOne(twitterHandle)
-        println("RECOMMENDING FOR $userId")
-        val recommendedProducts = recommendationService.recommendProducts(userId.userId, 5)
+//        val userId = twitterUserRepo.findOne(twitterHandle)
+        println("RECOMMENDING FOR $twitterHandle")
+        val recommendedProducts = recommendationService.recommendProducts(twitterHandle, 5)
         return recommendedProducts.filter { it.isIgtMatch }.flatMap { it.rawMatches.split(",") }
     }
 

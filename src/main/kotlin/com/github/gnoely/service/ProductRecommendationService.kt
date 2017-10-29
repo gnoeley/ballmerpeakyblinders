@@ -10,7 +10,10 @@ import org.apache.mahout.cf.taste.recommender.UserBasedRecommender
 import org.apache.mahout.cf.taste.similarity.UserSimilarity
 import org.springframework.stereotype.Service
 import java.io.File
-import java.util.*
+
+object Recommendation {
+    val userMap = mutableMapOf<String, Long>()
+}
 
 @Service
 class ProductRecommendationService(val productRepo: ProductRepository) {
@@ -30,10 +33,39 @@ class ProductRecommendationService(val productRepo: ProductRepository) {
         recommender = GenericUserBasedRecommender(model, neighborhood, similarity)
     }
 
-    fun recommendProducts(userId: String, num: Int): Set<Product> {
-        val userIdAsLong = userId.toLong()
-        val productIds = recommender.recommend(userIdAsLong, num).map { it.itemID.toString() }
+
+    fun recommendProducts(handle: String, num: Int): Set<Product> {
+
+        println(Recommendation.userMap)
+        val entry = if (Recommendation.userMap.containsKey(handle)) {
+            Recommendation.userMap.getValue(handle)
+        } else {
+            null
+        }
+
+        var choosenId = 1L
+        if (entry == null) {
+            println("PUT")
+            choosenId = chooseId()
+            println("CHOOSEN ID $choosenId")
+            Recommendation.userMap.put(handle, choosenId)
+        } else {
+            choosenId = entry
+        }
+        println("USER: $handle -> $choosenId")
+        val productIds = recommender.recommend(choosenId, num).map { it.itemID.toString() }
         return productRepo.findAll(productIds).toHashSet()
     }
 
+    fun chooseId(): Long {
+        val itr = recommender.dataModel.userIDs
+        while (itr.hasNext()) {
+            val id = itr.next()
+            println(id)
+            if (!Recommendation.userMap.containsValue(id)) {
+                return id
+            }
+        }
+        return 1L
+    }
 }
