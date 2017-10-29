@@ -4,7 +4,6 @@ import com.github.gnoely.lex.LexClient
 import com.github.gnoely.twitter.TwitterOut
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import twitter4j.Status
 import java.util.*
 
 @Component
@@ -18,6 +17,7 @@ class ConversationService {
     private val FAILED = "Failed"
 
     private val PERSONAL_RECOMMMENDATION_INENT = "PersonalRecommendation"
+    private val RECIPE_STARTER_INTENT = "RecipeStarter"
 
     private val sessions : MutableList<Session> = mutableListOf()
 
@@ -61,7 +61,13 @@ class ConversationService {
             if (PERSONAL_RECOMMMENDATION_INENT.equals(result?.intentName)) {
                 val reply = replyBuilderService.buildReply(session.userHandle, emptyList())
                 twitterOut.sendReply(statusId, fromScreenName, reply.message, reply.imageUrl)
-
+            } else if (RECIPE_STARTER_INTENT.equals(result?.intentName)) {
+                val ingredients = mutableListOf<String>()
+                result?.slots?.get("ingredientsOne")?.let { ingredients.add(it) }
+                result?.slots?.get("ingredientsTwo")?.let { ingredients.add(it) }
+                val cuisineString = result?.slots?.get("cuisine")?: "None"
+                val reply = replyBuilderService.buildReplyWithCuisine(session.userHandle, ingredients, cuisineString)
+                twitterOut.sendReply(statusId, fromScreenName, reply.message, reply.imageUrl)
             } else {
                 val ingredients = mutableListOf<String>()
                 result?.slots?.get("ingredientsOne")?.let { ingredients.add(it) }

@@ -1,8 +1,9 @@
 package com.github.gnoely.service
 
 import com.github.gnoely.messagegenerator.MessageGenerator
+import com.github.gnoely.model.Cuisine
+import com.github.gnoely.model.CuisineConverter
 import com.github.gnoely.model.Reply
-import com.github.gnoely.repository.OrderRepository
 import com.github.gnoely.repository.TwitterUserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -19,6 +20,13 @@ class ReplyBuildingService {
 
         var yummlyIngredients = if (ingredients.isEmpty()) findRecommendedIngredients(twitterHandle) else ingredients
         val recipe = RecipeService.getFirstIncludingIngredients(yummlyIngredients)
+        return MessageGenerator.generateMessage(recipe, yummlyIngredients)
+    }
+
+    fun buildReplyWithCuisine(twitterHandle: String, ingredients: List<String>, cuisineString: String) : Reply {
+        var yummlyIngredients = if (ingredients.isEmpty()) findRecommendedIngredients(twitterHandle) else ingredients
+        var cuisine: Cuisine = CuisineConverter.fromInput(cuisineString)
+        val recipe = RecipeService.getFirstRecipeWithCuisine("", yummlyIngredients, cuisine)
         return MessageGenerator.generateMessage(recipe, yummlyIngredients)
     }
 
