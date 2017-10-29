@@ -20,6 +20,7 @@ class Application {
             val start = System.nanoTime()
 //            service.findAllProductsForTwitterHandle("leonpelech").forEach { println(it) }
 //            productService.findAllInFoodDepartments().forEach { println(it) }
+//            service.dumpUserProductStats().forEach { println(it) }
             val end = System.nanoTime()
             println("FINISHED!: ${TimeUnit.NANOSECONDS.toMillis(end - start)}ms")
 

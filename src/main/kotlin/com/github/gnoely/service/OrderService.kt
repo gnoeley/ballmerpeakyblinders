@@ -5,6 +5,7 @@ import com.github.gnoely.model.Product
 import com.github.gnoely.repository.OrderRepository
 import com.github.gnoely.repository.TwitterUserRepository
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
@@ -26,4 +27,20 @@ class OrderService(val orderRepo: OrderRepository, val twitterUserRepo: TwitterU
         val userId = twitterUserRepo.findOne(handle)?.userId
         return if (userId != null) findAllProductsForUserId(userId) else emptySet()
     }
+
+    fun dumpUserProductStats(): List<UserProductStats> {
+        val userIds = orderRepo.findAllUniqueUserIds().stream().limit(10).collect(Collectors.toList())
+
+        val userIdProductPairs = userIds.map { userId ->
+            Pair(userId, orderRepo.findAllByUserId(userId).flatMap { it.productsPrior }.groupingBy { it.id }.eachCount()) }
+
+        val userProductStats = userIdProductPairs.flatMap { pair ->
+            pair.second.entries.map { UserProductStats(pair.first.toLong(), it.key.toLong(), it.value) } }
+
+        return userProductStats
+    }
+
+
 }
+
+data class UserProductStats(val userId: Long, val productId: Long, val count: Int)

@@ -16,6 +16,6 @@ data class Aisle(
 data class Department(
         @Id
         @Column(name="department_id")
-        val departmentId: Int,
-        val department: String
+        val departmentId: Int = -1,
+        val department: String = ""
 )
