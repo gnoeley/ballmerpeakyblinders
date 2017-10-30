@@ -33,13 +33,13 @@ class ConversationService {
 
         if (inReplyToStatusId != null && inReplyToStatusId > 0 && inReplyToScreenName == "BallmerPeakyB") {
             session = sessions.find { it.lastStatusIdFromUs == inReplyToStatusId }
-//            session = session?.copy(lastStatusIdFromUs = inReplyToStatusId)
         }
 
         if (session == null) {
             session = Session(userHandle = fromScreenName,
                 userName = fromUserName,
                 sessionId = UUID.randomUUID().toString())
+            sessions.add(session)
         }
         println("Using sessionID = ${session.sessionId}")
         return session
@@ -90,7 +90,7 @@ class ConversationService {
         } else {
             val outStatusId = twitterOut.sendReply(inStatusId, fromScreenName, result?.message ?: "", null)
             println("outStatusId $outStatusId")
-            sessions.add(session.copy(lastStatusIdFromUs = outStatusId))
+            session.lastStatusIdFromUs = outStatusId
         }
     }
 
