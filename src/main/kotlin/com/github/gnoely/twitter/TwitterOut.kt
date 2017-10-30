@@ -51,7 +51,7 @@ class TwitterOut {
         val message = buildMessage(originalStatusId, mentionUser, body, imageUrl)
         var status : Status? = null
         if (enabled) {
-            status = twitter.updateStatus(buildMessage(originalStatusId, mentionUser, body, imageUrl))
+            status = twitter.updateStatus(message)
             println("Successfully updated the status to [" + status.text + "].")
         } else {
             println(">>> Outbound tweets disabled -> would have sent message ${message.status}")
