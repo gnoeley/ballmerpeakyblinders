@@ -32,6 +32,8 @@ class TwitterOut {
 
     val twitter = TwitterFactory().instance!!
 
+    val fakeStatusId = 0
+
     @PostConstruct
     private fun auth() {
         if (!enabled) {
@@ -49,16 +51,14 @@ class TwitterOut {
 
     fun sendReply(originalStatusId : Long, mentionUser : String , body : String, imageUrl: String?): Long {
         val message = buildMessage(originalStatusId, mentionUser, body, imageUrl)
-        var status : Status? = null
         if (enabled) {
-            status = twitter.updateStatus(message)
+            val status = twitter.updateStatus(message)
             println("Successfully updated the status to [" + status.text + "].")
+            return status.id
         } else {
             println(">>> Outbound tweets disabled -> would have sent message ${message.status}")
+            return fakeStatusId + 1L
         }
-
-        return status?.id ?: 0
-
     }
 
 

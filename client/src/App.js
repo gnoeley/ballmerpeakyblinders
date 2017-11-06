@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import LexChat from 'react-lex'
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+    render() {
+        return (
 
+            <LexChat
+                botName="Recipe"
+                IdentityPoolId="<put your bot's identity pool id here>"
+                placeholder="Placeholder text"
+                style={{position: 'absolute'}}
+                backgroundColor="#FFFFFF"
+                height={430}
+                headerText="Chat with our awesome bot" />
+        )
+    }
+}
 export default App;

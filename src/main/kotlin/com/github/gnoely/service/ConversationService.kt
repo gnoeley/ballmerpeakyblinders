@@ -1,6 +1,7 @@
 package com.github.gnoely.service
 
 import com.github.gnoely.lex.LexClient
+import com.github.gnoely.messageconverter.TwitterMessageConverter
 import com.github.gnoely.twitter.TwitterOut
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -12,6 +13,8 @@ class ConversationService {
     @Autowired private lateinit var twitterOut : TwitterOut
     @Autowired private lateinit var lexClient : LexClient
     @Autowired private lateinit var replyBuilderService: ReplyBuildingService
+    @Autowired private lateinit var twitterMessageConverter: TwitterMessageConverter
+
 
     private val READY_FOR_FULFILLMENT = "ReadyForFulfillment"
     private val FAILED = "Failed"
@@ -38,10 +41,10 @@ class ConversationService {
         if (session == null) {
             session = Session(userHandle = fromScreenName,
                 userName = fromUserName,
-                sessionId = UUID.randomUUID().toString())
+                userId = UUID.randomUUID().toString())
             sessions.add(session)
         }
-        println("Using sessionID = ${session.sessionId}")
+        println("Using sessionID = ${session.userId}")
         return session
     }
 
@@ -51,16 +54,15 @@ class ConversationService {
         inStatusId: Long,
         inReplyToStatusId : Long?,
         inReplyToScreenName : String?,
-        messageText : String ) {
+        replyText: String ) {
 
         if (fromScreenName == "BallmerPeakyB") {
             return
         }
 
+        val messageText = twitterMessageConverter.convertMessageToQuery(replyText)
         val session = getSession(fromScreenName, fromUserName, inReplyToStatusId, inReplyToScreenName)
-        val result = lexClient.sendTextToLex(messageText, session.sessionId)
-
-
+        val result = lexClient.sendTextToLex(messageText, session.userId)
 
         if (READY_FOR_FULFILLMENT.equals(result?.dialogState)) {
             if (PERSONAL_RECOMMMENDATION_INENT.equals(result?.intentName)) {
@@ -101,4 +103,4 @@ data class Session(var lastStatusIdFromUs: Long? = null,
               var lastDialogState: String? = null,
               val userHandle: String,
               val userName: String,
-              val sessionId: String)
+              val userId: String)

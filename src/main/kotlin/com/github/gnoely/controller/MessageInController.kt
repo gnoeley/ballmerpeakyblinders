@@ -18,8 +18,9 @@ class MessageInController {
         @PathVariable(value="userHandle" ) userHandle : String ,
         @RequestParam message : String,
         @RequestParam replyToId : Long,
+        @RequestParam inStatusId : Long = 123,
         @RequestParam replyToUser : String) {
-        conversationService.handleMessage(userHandle, userHandle, 123, replyToId, replyToUser, message )
+        conversationService.handleMessage(userHandle, userHandle, inStatusId, replyToId, replyToUser, message )
 
 
     }
