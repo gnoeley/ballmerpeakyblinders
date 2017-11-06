@@ -13,9 +13,9 @@ spring:
 twitter:
   client:
     in:
-      enabled: true
+      enabled: false
     out:
-      enabled: true
+      enabled: false
 
 flyway:
   baseline-on-migrate: true
