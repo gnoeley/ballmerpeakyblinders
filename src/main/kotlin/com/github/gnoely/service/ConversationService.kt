@@ -70,8 +70,8 @@ class ConversationService {
                 twitterOut.sendReply(inStatusId, fromScreenName, reply.message, reply.imageUrl)
             } else if (RECIPE_STARTER_INTENT.equals(result?.intentName)) {
                 val ingredients = mutableListOf<String>()
-                result?.slots?.get("ingredientsOne")?.let { ingredients.add(it) }
-                result?.slots?.get("ingredientsTwo")?.let { ingredients.add(it) }
+                result?.slots?.get("mainIngredient")?.let { ingredients.add(it) }
+                result?.slots?.get("secondIngredient")?.let { ingredients.add(it) }
                 val cuisineString = result?.slots?.get("cuisine")?: "None"
                 val reply = replyBuilderService.buildReplyWithCuisine(session.userHandle, ingredients, cuisineString)
                 twitterOut.sendReply(inStatusId, fromScreenName, reply.message, reply.imageUrl)

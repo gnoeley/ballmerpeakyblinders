@@ -19,7 +19,7 @@ object YummlyClient {
 
     fun searchForRecipeIncluding(query: String, ingredients: List<String>) : Optional<Recipe> {
         val searchResult: SearchResult = yummly.search(query, ingredients)
-        return getRecipes(searchResult)
+        return getRecipes(searchResult, ingredients)
     }
 
     fun searchForRecipeWithCuisine(query: String, ingredients: List<String>, cuisine: Cuisine): Optional<Recipe> {
@@ -27,19 +27,23 @@ object YummlyClient {
             return searchForRecipeIncluding(query, ingredients)
         } else {
             val searchResult: SearchResult = yummly.searchWithCuisine(query, ingredients, cuisine.searchTerm)
-            return getRecipes(searchResult)
+            return getRecipes(searchResult, ingredients)
         }
     }
 
-    private fun getRecipes(searchResult: SearchResult): Optional<Recipe> {
+    private fun getRecipes(searchResult: SearchResult, ingredients: List<String>): Optional<Recipe> {
         val recipes = searchResult.matches
         if (recipes.isEmpty()) {
             return Optional.empty()
         }
-        val partialRecipe = recipes[Math.floor(Math.random()*recipes.size).toInt()]
-        return Optional.of(yummly.getRecipe(partialRecipe.id))
+        val singularisedIngredients = ingredients.map { i -> i.toLowerCase().trimEnd('s')}
+        var partialRecipe : Recipe? = recipes.find { r -> singularisedIngredients.any({ r.name.toLowerCase().contains(it.toLowerCase()) }) }
+//        val partialRecipe = matchedRecipes.get(0)
+
+//        val partialRecipe = recipes[Math.floor(Math.random()*recipes.size).toInt()]
+        if (partialRecipe == null) {
+            partialRecipe = recipes.get(0)
+        }
+        return Optional.of(yummly.getRecipe(partialRecipe?.id))
     }
-
 }
-
-
